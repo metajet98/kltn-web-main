@@ -15,9 +15,13 @@ import {
   CRow
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-const axios = require('axios');
+import instance from 'src/network/http_client';
+import LocalStorage from 'src/storage/local_storage';
+import { useHistory } from "react-router-dom";
+import { toast } from 'react-toastify';
 
 const Login = () => {
+  let history = useHistory();
   const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
 
@@ -81,11 +85,14 @@ const Login = () => {
 
   function onLogin() {
     console.log(phoneNumber, password);
-    axios.post('http://localhost:5001/api/login', {
+    instance.post('api/login', {
       PhoneNumber: phoneNumber, 
       Password: password
     }).then(function (response) {
       console.log(response); 
+      LocalStorage.setToken(response.data);
+      toast.info("Đăng nhập thành công!");
+      history.push('/');
     })
     .catch(function (error) {
       console.log(error);

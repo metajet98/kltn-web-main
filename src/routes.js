@@ -38,6 +38,12 @@ const Widgets = React.lazy(() => import('./views/widgets/Widgets'));
 const Users = React.lazy(() => import('./views/users/Users'));
 const User = React.lazy(() => import('./views/users/User'));
 
+const VehicleCompanyPage = React.lazy(() => import('./views/pages/center/vehicle/company/vehicle_company_page'))
+const VehicleTypePage = React.lazy(() => import('./views/pages/center/vehicle/type/vehicle_type_page'))
+const VehicleGroupPage = React.lazy(() => import('./views/pages/center/vehicle/group/vehicle_group_page'))
+
+const BranchPage = React.lazy(() => import('./views/pages/center/branch/branch_page'))
+
 const routes = [
   { path: '/', exact: true, name: 'Home' },
   { path: '/dashboard', name: 'Dashboard', component: Dashboard },
@@ -78,7 +84,14 @@ const routes = [
   { path: '/notifications/toaster', name: 'Toaster', component: Toaster },
   { path: '/widgets', name: 'Widgets', component: Widgets },
   { path: '/users', exact: true,  name: 'Users', component: Users },
-  { path: '/users/:id', exact: true, name: 'User Details', component: User }
+  { path: '/users/:id', exact: true, name: 'User Details', component: User },
+
+
+  { path: '/vehicle/company', exact: true, name: 'Công ty xe', component: VehicleCompanyPage },
+  { path: '/vehicle/type', exact: true, name: 'Loại xe', component: VehicleTypePage },
+  { path: '/vehicle/group', exact: true, name: 'Nhóm xe', component: VehicleGroupPage },
+
+  { path: '/branch', exact: true, name: 'Chi nhánh', component: BranchPage }
 ];
 
 export default routes;
