@@ -43,6 +43,7 @@ const VehicleTypePage = React.lazy(() => import('./views/pages/center/vehicle/ty
 const VehicleGroupPage = React.lazy(() => import('./views/pages/center/vehicle/group/vehicle_group_page'))
 
 const BranchPage = React.lazy(() => import('./views/pages/center/branch/branch_page'))
+const SparePartPage = React.lazy(() => import('./views/pages/center/spare_part/spare_part_page'))
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
@@ -91,7 +92,8 @@ const routes = [
   { path: '/vehicle/type', exact: true, name: 'Loại xe', component: VehicleTypePage },
   { path: '/vehicle/group', exact: true, name: 'Nhóm xe', component: VehicleGroupPage },
 
-  { path: '/branch', exact: true, name: 'Chi nhánh', component: BranchPage }
+  { path: '/branch', exact: true, name: 'Chi nhánh', component: BranchPage },
+  { path: '/center/spare-part', exact: true, name: 'Phụ tùng', component: SparePartPage }
 ];
 
 export default routes;

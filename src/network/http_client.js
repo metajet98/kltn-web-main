@@ -1,4 +1,5 @@
 import { useHistory } from 'react-router-dom';
+import { createBrowserHistory } from 'history'
 import { toast } from 'react-toastify';
 import { BASE_URL, timeout } from 'src/config/config';
 import LocalStorage from 'src/storage/local_storage';
@@ -52,8 +53,8 @@ instance.interceptors.response.use(function (response) {
                 })
                 .catch(err => {
                     LocalStorage.clear();
-                    let history = useHistory();
-                    history.push(`/login`);
+                    createBrowserHistory().push(`/#/login`);
+                    window.location.reload();
                     toast.error("Phiên đăng nhập đã hết hạn, vui lòng đăng nhập lại!");
                 });
         }

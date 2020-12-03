@@ -1,94 +1,140 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from "react";
 import {
-    CButton,
-    CCard,
-    CCardBody,
-    CCardHeader,
-    CCol,
-    CDataTable,
-    CLabel,
-    CRow,
-} from '@coreui/react'
-import instance from 'src/network/http_client';
-import useModal from 'src/views/useModal';
+  CButton,
+  CCard,
+  CCardBody,
+  CCardHeader,
+  CCol,
+  CDataTable,
+  CLabel,
+  CRow,
+  CSelect,
+} from "@coreui/react";
+import instance from "src/network/http_client";
+import useModal from "src/views/useModal";
 
-import { trackPromise } from 'react-promise-tracker';
+import { trackPromise } from "react-promise-tracker";
+import AddSparePartModal from "./add_spare_part_modal";
 
-const fields = ['id', 'name', 'description', "action"]
+const fields = ["id", "name", "description", "action"];
 
 const SparePartPage = () => {
-    const [vehicles, setVehicles] = useState();
+  const [vehicleGroups, setVehicleGroups] = useState();
 
-    const [spareParts, setSpareParts] = useState();
+  const [spareParts, setSpareParts] = useState();
 
-    const { isShowing: isShowingAddSparePartModal, toggle: toggleAddSparePartModal } = useModal();
+  const [selectedVehicleGroupId, setSelectedVehicleGroupId] = useState();
 
-    useEffect(() => {
-        trackPromise(
-            await loadVehicleGroup(),
-            await loadSpareParts()
-        );
-    }, []);
+  const {
+    isShowing: isShowingAddSparePartModal,
+    toggle: toggleAddSparePartModal,
+  } = useModal();
 
-    async function loadVehicleGroup() {
-        const response = await instance.get(`api/vehicle-group`);
-        if(response && response.data) {
-            setVehicles(response.data.data);
-        }
+  useEffect(() => {
+    trackPromise(loadVehicleGroup());
+  }, []);
+
+  async function loadVehicleGroup() {
+    const response = await instance.get(`api/vehicle-group`);
+    if (response && response.data) {
+      setVehicleGroups(response.data.data);
     }
+  }
 
-    async function loadSpareParts(vehicleId) {
-        const response = await instance.get(`api/${vehicleId}/spare-part`);
-        if(response && response.data) {
-            setSpareParts(response.data.data);
-        }
+  async function loadSpareParts(vehicleGroupId) {
+    const response = await instance.get(`api/vehicle-group/${vehicleGroupId}/spare-part`);
+    if (response && response.data) {
+      setSpareParts(response.data.data);
     }
+  }
 
-    async function deleteSparePart(id, vehicleId) {
-        await instance.delete(`api/${vehicleId}/spare-part/${id}`);
-        loadSpareParts(vehicleId);
-    }
+  async function deleteSparePart(id, vehicleGroupId) {
+    await instance.delete(`api/spare-part/${id}`);
+    loadSpareParts(vehicleGroupId);
+  }
 
-    return (
-        <div>
-            <AddSparePartModal onAddSuccess={() => loadSparePartes()} hide={toggleAddSparePartModal} isShowing={isShowingAddSparePartModal} />
-            <CRow>
-                <CCol>
-                    <CCard>
-                        <CCardHeader>
-                            <CLabel>Danh sách chi nhánh</CLabel>
-                            <CButton onClick={toggleAddSparePartModal} className="float-right">Thêm</CButton>
-                        </CCardHeader>
-                        <CCardBody>
-                            <CDataTable
-                                items={SparePartes}
-                                fields={fields}
-                                itemsPerPage={5}
-                                pagination
-                                scopedSlots={{
-                                    'logo':
-                                        (item) => (
-                                            <td>
-                                                <img height={100} width={100} src={item.logo} className="img-fluid" alt="logo" />
-                                            </td>
-                                        ),
-                                    'action':
-                                        (item) => (
-                                            <td>
-                                                <CRow className="align-items-center">
-                                                    <CButton size="sm" color="info">Sửa</CButton>
-                                                    <CButton size="sm" color="danger" onClick={() => deleteSparePart(item.id)}>Xóa</CButton>
-                                                </CRow>
-                                            </td>
-                                        ),
-                                }}
-                            />
-                        </CCardBody>
-                    </CCard>
+  function onSelectVehicleGroup(vehicleGroupId) {
+    setSelectedVehicleGroupId(vehicleGroupId);
+    loadSpareParts(vehicleGroupId);
+  }
+
+  return (
+    <div>
+      <AddSparePartModal
+        onAddSuccess={() => loadSpareParts(selectedVehicleGroupId)}
+        hide={toggleAddSparePartModal}
+        isShowing={isShowingAddSparePartModal}
+        vehicleGroupId={selectedVehicleGroupId}
+      />
+      <CCol>
+        <CCard>
+          <CCardHeader>
+            <CLabel>Danh sách kiểm tra</CLabel>
+            <CButton onClick={toggleAddSparePartModal} className="float-right">
+              Thêm
+            </CButton>
+          </CCardHeader>
+          <CCardBody>
+            <CCol>
+              <CRow>
+                <CCol md="6">
+                  <CSelect
+                    custom
+                    name="selectVehicleGroup"
+                    id="cbbVehicleGroup"
+                    onChange={(e) => onSelectVehicleGroup(e.target.value)}
+                  >
+                    <option>Chọn xe</option>
+                    {vehicleGroups?.map((e) => (
+                      <option key={e.id} value={e.id}>{e.name}</option>
+                    ))}
+                  </CSelect>
                 </CCol>
-            </CRow>
-        </div>
-    );
-}
+              </CRow>
+              <br></br>
+              <CDataTable
+                items={spareParts}
+                fields={fields}
+                itemsPerPage={5}
+                pagination
+                scopedSlots={{
+                  logo: (item) => (
+                    <td>
+                      <img
+                        height={100}
+                        width={100}
+                        src={item.logo}
+                        className="img-fluid"
+                        alt="logo"
+                      />
+                    </td>
+                  ),
+                  action: (item) => (
+                    <td>
+                      <CRow className="align-items-center">
+                        <CButton size="sm" color="info">
+                          Sửa
+                        </CButton>
+                        <CButton
+                          size="sm"
+                          color="danger"
+                          onClick={() =>
+                            deleteSparePart(item.id, selectedVehicleGroupId)
+                          }
+                        >
+                          Xóa
+                        </CButton>
+                      </CRow>
+                    </td>
+                  ),
+                }}
+              />
+            </CCol>
+          </CCardBody>
+        </CCard>
+      </CCol>
+    </div>
+  );
+};
 
 export default SparePartPage;

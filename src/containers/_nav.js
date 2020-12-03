@@ -14,6 +14,12 @@ export default [
   },
   {
     _tag: "CSidebarNavItem",
+    name: "Phụ tùng",
+    to: "/center/spare-part",
+    icon: "cil-pencil",
+  },
+  {
+    _tag: "CSidebarNavItem",
     name: "Chi nhánh",
     to: "/branch",
     icon: "cil-pencil",
