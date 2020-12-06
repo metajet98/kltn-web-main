@@ -72,10 +72,4 @@ export default [
     to: "/maintenance",
     icon: "cil-pencil",
   },
-  {
-    _tag: "CSidebarNavItem",
-    name: "",
-    to: "/maintenance",
-    icon: "cil-pencil",
-  },
 ];

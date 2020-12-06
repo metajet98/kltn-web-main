@@ -1,4 +1,3 @@
-import { useHistory } from 'react-router-dom';
 import { createBrowserHistory } from 'history'
 import { toast } from 'react-toastify';
 import { BASE_URL, timeout } from 'src/config/config';

@@ -1,13 +1,13 @@
 import React from 'react'
 import {
-  CBadge,
   CDropdown,
   CDropdownItem,
   CDropdownMenu,
   CDropdownToggle,
-  CImg
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
+import LocalStorage from 'src/storage/local_storage'
+import { createBrowserHistory } from 'history'
 
 const TheHeaderDropdown = () => {
   return (
@@ -36,7 +36,11 @@ const TheHeaderDropdown = () => {
           Settings
         </CDropdownItem>
         <CDropdownItem divider />
-        <CDropdownItem>
+        <CDropdownItem onClick={() => {
+          LocalStorage.clear();
+          createBrowserHistory().push(`/#/login`);
+          window.location.reload();
+        }}>
           <CIcon name="cil-lock-locked" className="mfe-2" /> 
           Đăng xuất
         </CDropdownItem>
