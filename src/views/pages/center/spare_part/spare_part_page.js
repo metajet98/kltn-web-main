@@ -69,7 +69,7 @@ const SparePartPage = () => {
       <CCol>
         <CCard>
           <CCardHeader>
-            <CLabel>Danh sách kiểm tra</CLabel>
+            <CLabel>Danh mục kiểm tra</CLabel>
             <CButton onClick={toggleAddSparePartModal} className="float-right">
               Thêm
             </CButton>
