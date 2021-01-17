@@ -62,14 +62,4 @@ export default [
     to: "/statistic",
     icon: "cil-pencil",
   },
-  {
-    _tag: "CSidebarNavTitle",
-    _children: ["Chi nhánh"],
-  },
-  {
-    _tag: "CSidebarNavItem",
-    name: "Lượt bảo dưỡng",
-    to: "/maintenance",
-    icon: "cil-pencil",
-  },
 ];

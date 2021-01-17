@@ -15,7 +15,10 @@ import {
 import CIcon from '@coreui/icons-react'
 
 // sidebar nav config
-import navigation from './_nav'
+import navigationCenter from './_nav_center'
+import navigationBranch from './_nav_branch'
+import LocalStorage from 'src/storage/local_storage'
+
 
 const TheSidebar = () => {
   const dispatch = useDispatch()
@@ -39,9 +42,8 @@ const TheSidebar = () => {
         />
       </CSidebarBrand>
       <CSidebarNav>
-
         <CCreateElement
-          items={navigation}
+          items={LocalStorage.getUserRole() == "CenterManager" ? navigationCenter : navigationBranch}
           components={{
             CSidebarNavDivider,
             CSidebarNavDropdown,

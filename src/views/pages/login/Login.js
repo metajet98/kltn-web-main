@@ -83,14 +83,16 @@ const Login = () => {
 
   
 
-  function onLogin() {
+  async function onLogin() {
     console.log(phoneNumber, password);
     instance.post('api/login', {
       PhoneNumber: phoneNumber, 
       Password: password
-    }).then(function (response) {
-      console.log(response); 
+    }).then(async function (response) {
       LocalStorage.setToken(response.data);
+      var userData = await instance.get('api/user/self');
+      LocalStorage.setUser(userData.data.data);
+      
       toast.info("Đăng nhập thành công!");
       history.push('/');
     })
