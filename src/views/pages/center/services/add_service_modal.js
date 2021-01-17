@@ -20,12 +20,26 @@ import {
 const AddServiceModal = ({ isShowing, hide, onAddSuccess, vehicleGroupId }) => {
   var serviceName = useRef();
   var serviceDescription = useRef();
+  var serviceWarrantyOdo = useRef();
+  var serviceWarrantyPeriod = useRef();
 
   async function createService() {
+    var period;
+    var odo;
+    if (serviceWarrantyOdo) {
+      odo = parseInt(serviceWarrantyOdo.current);
+    }
+
+    if (serviceWarrantyPeriod) {
+      period = parseInt(serviceWarrantyPeriod.current);
+    }
+
     let serviceData = {
       name: serviceName.current,
       description: serviceDescription.current,
       vehicleGroupId: vehicleGroupId,
+      warrantyPeriod: period,
+      warrantyOdo: odo,
     };
     await instance.post(`api/maintenance/service`, serviceData);
     hide();
@@ -64,6 +78,26 @@ const AddServiceModal = ({ isShowing, hide, onAddSuccess, vehicleGroupId }) => {
                       id="description"
                       placeholder="Nhập chi tiết"
                       required
+                    />
+                  </CFormGroup>
+                  <CFormGroup>
+                    <CLabel htmlFor="number">Odo Warranty</CLabel>
+                    <CInput
+                      onChange={(e) => {
+                        serviceWarrantyOdo.current = e.target.value;
+                      }}
+                      id="description"
+                      placeholder="Nhập km bảo hành"
+                    />
+                  </CFormGroup>
+                  <CFormGroup>
+                    <CLabel htmlFor="number">Odo Warranty</CLabel>
+                    <CInput
+                      onChange={(e) => {
+                        serviceWarrantyPeriod.current = e.target.value;
+                      }}
+                      id="description"
+                      placeholder="Nhập thời gian bảo hành (tháng)"
                     />
                   </CFormGroup>
                 </CForm>
