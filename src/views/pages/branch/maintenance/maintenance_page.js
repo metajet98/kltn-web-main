@@ -16,7 +16,7 @@ import { trackPromise } from "react-promise-tracker";
 import LocalStorage from "src/storage/local_storage";
 var moment = require("moment"); // require
 
-const fields = ["id","plateNumber", "time", "status"];
+const fields = ["id", "plateNumber", "time", "status", "print"];
 
 const MaintenancePage = () => {
   const [maintenances, setMaintenances] = useState();
@@ -36,9 +36,19 @@ const MaintenancePage = () => {
     const response = await instance.get("api/maintenance", {
       params: params,
     });
-    console.log(response);
     if (response && response.data) {
       setMaintenances(response.data.data);
+    }
+  }
+
+  async function onPrintClickHandle(maintenanceId) {
+    trackPromise(buildPdf(maintenanceId));
+  }
+
+  async function buildPdf(maintenanceId) {
+    const response = await instance.get(`api/maintenance/${maintenanceId}/pdf`);
+    if (response && response.data.data) {
+      window.open(response.data.data, "_blank")
     }
   }
 
@@ -73,9 +83,24 @@ const MaintenancePage = () => {
                 itemsPerPage={5}
                 pagination
                 scopedSlots={{
-                  "time": (item) => <td>{(new Date(item.createdDate)).toDateString()}</td>,
-                  "plateNumber": (item) => <td>{item.userVehicle.plateNumber}</td>,
-                  "status": (item) => <td>{getStatusText(item.status)}</td>,
+                  time: (item) => (
+                    <td>{new Date(item.createdDate).toDateString()}</td>
+                  ),
+                  plateNumber: (item) => (
+                    <td>{item.userVehicle.plateNumber}</td>
+                  ),
+                  status: (item) => <td>{getStatusText(item.status)}</td>,
+                  print: (item) => (
+                    <td>
+                      <CButton
+                        onClick={() => onPrintClickHandle(item.id)}
+                        size="sm"
+                        color="info"
+                      >
+                        In hoá đơn
+                      </CButton>
+                    </td>
+                  ),
                 }}
               />
             </CCardBody>
@@ -86,11 +111,15 @@ const MaintenancePage = () => {
   );
 
   function getStatusText(status) {
-    switch(status) {
-      case 1: return "Mới tạo";
-      case 2: return "Đang bảo dưỡng";
-      case 3: return "Đã xong";
-      default: return ""
+    switch (status) {
+      case 0:
+        return "Mới tạo";
+      case 1:
+        return "Đang bảo dưỡng";
+      case 2:
+        return "Đã xong";
+      default:
+        return "";
     }
   }
 };
