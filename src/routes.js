@@ -12,6 +12,8 @@ const MaintenanceServicePage = React.lazy(() => import('./views/pages/center/ser
 
 const SchedulePage = React.lazy(() => import('./views/pages/branch/schedule/schedule_page'))
 const MaintenancePage = React.lazy(() => import('./views/pages/branch/maintenance/maintenance_page'))
+const TopicPage = React.lazy(() => import('./views/pages/branch/topic/topic_page'))
+
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
@@ -26,7 +28,8 @@ const routes = [
   { path: '/center/service', exact: true, name: 'Dịch vụ', component: MaintenanceServicePage },
 
   { path: '/branch/schedule', exact: true, name: 'Lịch hẹn', component: SchedulePage },
-  { path: '/branch/maintenance', exact: true, name: 'Lượt bảo dưỡng', component: MaintenancePage }
+  { path: '/branch/maintenance', exact: true, name: 'Lượt bảo dưỡng', component: MaintenancePage },
+  { path: '/topic', exact: true, name: 'Hỏi đáp', component: TopicPage },
 ];
 
 export default routes;

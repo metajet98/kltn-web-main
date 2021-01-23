@@ -1,13 +1,17 @@
 import React, { lazy } from "react";
 import { useEffect, useState } from "react";
 import { DatetimeInput } from "react-datetime-inputs";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 
 import {
   CCard,
   CCardBody,
+  CCardTitle,
   CCol,
   CRow,
+  CWidgetDropdown,
+  CWidgetSimple,
+  CCallout,
 } from "@coreui/react";
 import { CChartLine } from "@coreui/react-chartjs";
 import { hexToRgba } from "@coreui/utils";
@@ -19,13 +23,20 @@ var moment = require("moment"); // require
 
 const Dashboard = () => {
   const [statistics, setStatistics] = useState();
+  const [currentStatistics, setCurrentStatistics] = useState();
 
-  const [filterStart, setFilterStart] = useState(moment().subtract(1, "months"));
+  const [filterStart, setFilterStart] = useState(
+    moment().subtract(1, "months")
+  );
   const [filterEnd, setFilterEnd] = useState(moment());
 
   useEffect(() => {
+    trackPromise(loadCurrentStatistic());
+  }, []);
+
+  useEffect(() => {
     console.log("useEffect");
-    if(filterStart >= filterEnd) {
+    if (filterStart >= filterEnd) {
       toast.error("Vui lòng chọn ngày đúng chuẩn!");
     } else {
       trackPromise(loadStatistic());
@@ -45,10 +56,73 @@ const Dashboard = () => {
     }
   }
 
+  async function loadCurrentStatistic() {
+    const response = await instance.get("api/utils/current-statistic");
+    if (response && response.data) {
+      setCurrentStatistics(response.data.data);
+    }
+  }
+
   return (
     <>
       <CCard>
         <CCardBody>
+          <CRow col="12" sm="6">
+            <CCol col="12" sm="6">
+              <CCallout color="info" className={"bg-secondary"}>
+                <small className="text-muted">Tổng số khách hàng</small>
+                <br />
+                <strong className="h4">{currentStatistics?.userCount}</strong>
+              </CCallout>
+              <CCallout color="info" className={"bg-secondary"}>
+                <small className="text-muted">Tổng số dịch vụ</small>
+                <br />
+                <strong className="h4">{currentStatistics?.serviceCount}</strong>
+              </CCallout>
+              <CCallout color="info" className={"bg-secondary"}>
+                <small className="text-muted">Tổng số chi nhánh</small>
+                <br />
+                <strong className="h4">{currentStatistics?.branchCount}</strong>
+              </CCallout>
+              <CCallout color="info" className={"bg-secondary"}>
+                <small className="text-muted">Tổng số xe khách hàng</small>
+                <br />
+                <strong className="h4">{currentStatistics?.userVehicleCount}</strong>
+              </CCallout>
+              <CCallout color="info" className={"bg-secondary"}>
+                <small className="text-muted">Tổng số thiết bị nhận thông báo</small>
+                <br />
+                <strong className="h4">{currentStatistics?.userReceivaleNotifyCount}</strong>
+              </CCallout>
+            </CCol>
+            <CCol col="12" sm="6">
+              <CCallout color="info" className={"bg-secondary"}>
+                <small className="text-muted">Tổng số nhân viên bảo dưỡng</small>
+                <br />
+                <strong className="h4">{currentStatistics?.maintenanceStaffCount}</strong>
+              </CCallout>
+              <CCallout color="info" className={"bg-secondary"}>
+                <small className="text-muted">Tổng số nhân viên trực bàn</small>
+                <br />
+                <strong className="h4">{currentStatistics?.deskStaffCount}</strong>
+              </CCallout>
+              <CCallout color="info" className={"bg-secondary"}>
+                <small className="text-muted">Số topic hỏi đáp</small>
+                <br />
+                <strong className="h4">{currentStatistics?.topicCount}</strong>
+              </CCallout>
+              <CCallout color="info" className={"bg-secondary"}>
+                <small className="text-muted">Đánh giá trung bình</small>
+                <br />
+                <strong className="h4">{currentStatistics?.avgReview}</strong>
+              </CCallout>
+              <CCallout color="info" className={"bg-secondary"}>
+                <small className="text-muted">Số lượt bảo dưỡng</small>
+                <br />
+                <strong className="h4">{currentStatistics?.maintenanceCount}</strong>
+              </CCallout>
+            </CCol>
+          </CRow>
           <CRow>
             <CCol sm="5">
               <h4 id="traffic" className="card-title mb-0">
@@ -249,7 +323,7 @@ const MainChartExample = (attributes) => {
         options={totalBillOptions}
         labels={data.map((x) => new Date(x.date).getDate())}
       />
-      <br/>
+      <br />
       <div className="small text-muted">Chung</div>
       <CChartLine
         datasets={defaultDatasets}

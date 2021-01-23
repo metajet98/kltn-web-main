@@ -88,7 +88,7 @@ const MaintenancePage = () => {
   function getStatusText(status) {
     switch(status) {
       case 1: return "Mới tạo";
-      case 2: return "Đang bảo trì";
+      case 2: return "Đang bảo dưỡng";
       case 3: return "Đã xong";
       default: return ""
     }

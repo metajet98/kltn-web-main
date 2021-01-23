@@ -25,4 +25,10 @@ export default [
     to: "/branch/schedule",
     icon: "cil-pencil",
   },
+  {
+    _tag: "CSidebarNavItem",
+    name: "Hỏi đáp",
+    to: "/topic",
+    icon: "cil-pencil",
+  },
 ];

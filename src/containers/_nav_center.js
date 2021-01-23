@@ -62,4 +62,10 @@ export default [
     to: "/statistic",
     icon: "cil-pencil",
   },
+  {
+    _tag: "CSidebarNavItem",
+    name: "Hỏi đáp",
+    to: "/topic",
+    icon: "cil-pencil",
+  },
 ];
