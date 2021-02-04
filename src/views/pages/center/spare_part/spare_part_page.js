@@ -111,11 +111,7 @@ const SparePartPage = () => {
                   ),
                   action: (item) => (
                     <td>
-                      <CRow className="align-items-center">
-                        <CButton size="sm" color="info">
-                          Sửa
-                        </CButton>
-                        <CButton
+                      <CButton
                           size="sm"
                           color="danger"
                           onClick={() =>
@@ -124,7 +120,6 @@ const SparePartPage = () => {
                         >
                           Xóa
                         </CButton>
-                      </CRow>
                     </td>
                   ),
                 }}

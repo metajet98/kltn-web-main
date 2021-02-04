@@ -241,18 +241,13 @@ const MaintenanceServicePage = () => {
                     } else {
                       return (
                         <td>
-                          <CRow className="align-items-center">
-                            <CButton size="sm" color="info">
-                              Sửa
-                            </CButton>
-                            <CButton
+                          <CButton
                               size="sm"
                               color="danger"
                               onClick={() => deleteServices(item.id)}
                             >
                               Xóa
                             </CButton>
-                          </CRow>
                         </td>
                       );
                     }

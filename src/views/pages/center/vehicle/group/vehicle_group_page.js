@@ -62,10 +62,7 @@ const VehicleGroupPage = () => {
                                     'action':
                                         (item) => (
                                             <td>
-                                                <CRow className="align-items-center">
-                                                    <CButton color="info">Sửa</CButton>
-                                                    <CButton color="danger" onClick={() => deleteGroup(item.id)}>Xóa</CButton>
-                                                </CRow>
+                                                <CButton color="danger" onClick={() => deleteGroup(item.id)}>Xóa</CButton>
                                             </td>
                                         ),
                                 }}

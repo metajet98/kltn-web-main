@@ -16,7 +16,7 @@ import useModal from "src/views/useModal";
 import { trackPromise } from "react-promise-tracker";
 import AddStaffModal from "./add_staff_modal";
 
-const fields = ["id", "fullName", "branch", "role", "action"];
+const fields = ["id", "fullName", "branch", "role"];
 const StaffPage = () => {
   const [branches, setBranches] = useState();
 
@@ -94,16 +94,7 @@ const StaffPage = () => {
                 scopedSlots={{
                   branch: (item) => (
                     <td>{item.branch?.name}</td>
-                  ),
-                  action: (item) => (
-                    <td>
-                      <CRow className="align-items-center">
-                        <CButton size="sm" color="info">
-                          Sửa
-                        </CButton>
-                      </CRow>
-                    </td>
-                  ),
+                  )
                 }}
               />
             </CCol>

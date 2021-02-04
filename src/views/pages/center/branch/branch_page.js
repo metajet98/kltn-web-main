@@ -66,10 +66,7 @@ const BranchPage = () => {
                                     'action':
                                         (item) => (
                                             <td>
-                                                <CRow className="align-items-center">
-                                                    <CButton size="sm" color="info">Sửa</CButton>
-                                                    <CButton size="sm" color="danger" onClick={() => deleteBranch(item.id)}>Xóa</CButton>
-                                                </CRow>
+                                                <CButton size="sm" color="danger" onClick={() => deleteBranch(item.id)}>Xóa</CButton>
                                             </td>
                                         ),
                                 }}
