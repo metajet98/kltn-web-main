@@ -14,18 +14,33 @@ import instance from "src/network/http_client";
 
 import { trackPromise } from "react-promise-tracker";
 import LocalStorage from "src/storage/local_storage";
+import DenyScheduleReviewModal from "./deny_shedule_review_modal";
+import useModal from "src/views/useModal";
 var moment = require("moment"); // require
 
-const fields = ["id", "user", "notes", "time"];
+const fields = ["id", "user", "notes", "time", "status", "action"];
 
 const SchedulePage = () => {
   const [schedules, setSchedules] = useState();
 
   const [filterDate, setFilterDate] = useState(moment());
 
+  const [selectedScheduleId, setSelectedScheduleId] = useState();
+
+  const {
+    isShowing: isShowingDenyScheduleReviewModal,
+    toggle: toggleDenyScheduleReviewModal,
+  } = useModal();
+
   useEffect(() => {
     trackPromise(loadSchedule());
   }, [filterDate]);
+
+  function getStatusText(status) {
+    if (status == 1) return "Đã duyệt";
+    else if (status == 2) return "Bị từ chối";
+    else return "";
+  }
 
   async function loadSchedule() {
     var branchId = LocalStorage.getStaffBranchId();
@@ -42,8 +57,24 @@ const SchedulePage = () => {
     }
   }
 
+  async function approveSchedule(id) {
+    const response = await instance.post(`api/calender/${id}`, {
+      IsApprove: true,
+    });
+    console.log(response);
+    if (response && response.data) {
+      loadSchedule();
+    }
+  }
+
   return (
     <div>
+      <DenyScheduleReviewModal
+        scheduleId={selectedScheduleId}
+        hide={toggleDenyScheduleReviewModal}
+        isShowing={isShowingDenyScheduleReviewModal}
+        onDenySuccess={() => loadSchedule()}
+      />
       <CRow>
         <CCol>
           <CCard>
@@ -74,6 +105,34 @@ const SchedulePage = () => {
                 pagination
                 scopedSlots={{
                   user: (item) => <td>{item.user.fullName}</td>,
+                  status: (item) => <td>{getStatusText(item.status)}</td>,
+                  action: (item) => (
+                    <td>
+                      {item.status == null && (
+                        <div>
+                          <CButton
+                            onClick={() => {
+                              approveSchedule(item.id);
+                            }}
+                            size="sm"
+                            color="info"
+                          >
+                            Đồng ý
+                          </CButton>
+                          <CButton
+                            onClick={() => {
+                              setSelectedScheduleId(item.id);
+                              toggleDenyScheduleReviewModal();
+                            }}
+                            size="sm"
+                            color="danger"
+                          >
+                            Từ chối
+                          </CButton>
+                        </div>
+                      )}
+                    </td>
+                  ),
                 }}
               />
             </CCardBody>
